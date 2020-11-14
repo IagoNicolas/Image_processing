@@ -25,7 +25,6 @@ def image_load(image_file):
     img_gs = imread(image_file, 0)
     image_check(img_color, img_gs)
     img_color = cvtColor(imread(image_file, 1), COLOR_BGR2RGB)
-    pbar.update(1)
     return (img_gs, img_color)
 
 
@@ -56,7 +55,6 @@ def grayscale_filter(img_gs, bil_1, bil_2):
         img_gs_sv_col[j] = lfilter(
             x=pd.DataFrame(img_gs_sv_row).loc[:, j], b=bil_1, a=bil_2
         )
-    pbar.update(1)
     return (img_gs_sv_row, img_gs_sv_col)
 
 
@@ -99,7 +97,6 @@ def rgb_filter(img_color, bil_1, bil_2):
     img_rgb_sv_col[:, :, 0] = img_r_sv_col
     img_rgb_sv_col[:, :, 1] = img_g_sv_col
     img_rgb_sv_col[:, :, 2] = img_b_sv_col
-    pbar.update(1)
     return (img_rgb_sv_row, img_rgb_sv_col)
 
 
@@ -110,7 +107,6 @@ def image_save(name, image, mode, angle, side):
     if side == 1:
         img = ImageOps.flip(img)
     img.rotate(angle).save("output/" + name)
-    pbar.update(1)
     return None
 
 
@@ -125,7 +121,6 @@ def grayscale_allpass(img_gs, pole, freq_number):
     img_gs_ap_row = np.zeros(shape=[len(img_gs_df), len(img_gs_df)])
     for i in range(0, len(img_gs_df)):
         img_gs_ap_row[i] = all_pass(img_gs_df.loc[i, :], pole, freq_number)
-    pbar.update(1)
     return img_gs_ap_row
 
 
@@ -139,28 +134,23 @@ def rgb_allpass(pole, freq_number):
     for i in range(0, len(img_color_r_df)):
         img_r_ap_row[i] = all_pass(img_color_r_df.loc[i, :], pole, freq_number)
 
-    pbar.update(1)
     for i in range(0, len(img_color_g_df)):
         img_g_ap_row[i] = all_pass(img_color_g_df.loc[i, :], pole, freq_number)
 
-    pbar.update(1)
     for i in range(0, len(img_color_b_df)):
         img_b_ap_row[i] = all_pass(img_color_b_df.loc[i, :], pole, freq_number)
 
-    pbar.update(1)
     img_rgb_ap_row = np.zeros([512, 512, 3])
 
     img_rgb_ap_row[:, :, 0] = img_r_ap_row
     img_rgb_ap_row[:, :, 1] = img_g_ap_row
     img_rgb_ap_row[:, :, 2] = img_b_ap_row
-    pbar.update(1)
     return img_rgb_ap_row
 
 
 def derivative(img):
     img_der_hor = np.diff(img, n=1, axis=0)  # horizontal derivative
     img_der_ver = np.diff(img_der_hor, n=1, axis=1)  # vertical derivative
-    pbar.update(1)
     return img_der_ver
 
 
@@ -200,14 +190,10 @@ def finding_white(image, high, low):
     high = image.max() * high
     low = high * low
     bright = np.zeros((len(image), len(image)), dtype=np.int32)
-
     weak = np.int32(75)
     strong = np.int32(255)
-
     strong_i, strong_j = np.where(image >= high)
-    zeros_i, zeros_j = np.where(image < low)
     weak_i, weak_j = np.where((image <= high) & (image >= low))
-
     bright[strong_i, strong_j] = strong
     bright[weak_i, weak_j] = weak
 
@@ -245,7 +231,6 @@ def edge_gs_detect(image, std_dev, k_size):
     edge = no_blur(edge, arctg)
     edge = finding_white(edge, high = .15, low = .05)
     edge = finding_black(edge, white = 100, gray = 75)
-    pbar.update(1)
     return edge
 
 
@@ -261,14 +246,14 @@ def edge_rgb_detect(image, std_dev, k_size):
     img_rgb_edge[:, :, 0] = img_color_r_ed
     img_rgb_edge[:, :, 1] = img_color_g_ed
     img_rgb_edge[:, :, 2] = img_color_b_ed
-    pbar.update(1)
     
     return img_rgb_edge
 
 
-with tqdm(total=25, file=sys.stdout) as pbar:
+with tqdm(total=5, file=sys.stdout) as pbar:
     # Questão 1
     img_gs, img_color = image_load("Lenna.tif")
+    pbar.update(1)
     # Questão 2
     bil_1, bil_2 = bilinear(1, 4)
     img_gs_row, img_gs_col = grayscale_filter(img_gs, bil_1, bil_2)
@@ -277,18 +262,22 @@ with tqdm(total=25, file=sys.stdout) as pbar:
     img_rgb_row, img_rgb_col = rgb_filter(img_color, bil_1, bil_2)
     image_save("Lenna_rgb_1_row.tif", img_rgb_row, "RGB", 0, 0)
     image_save("Lenna_rgb_2_col.tif", img_rgb_col, "RGB", 270, 1)
+    pbar.update(1)
     # Questão 3
     img_gs_derivative = derivative(img_gs_col)
     image_save("Lenna_gs_3_der.tif", img_gs_derivative, "L", 270, 1)
     img_rgb_derivative = derivative(img_rgb_col)
     image_save("Lenna_rgb_3_der.tif", img_rgb_derivative, "RGB", 270, 1)
+    pbar.update(1)
     # Questão 4
     img_gs_ap = grayscale_allpass(img_gs, 1 / 2, 3584)
     image_save("Lenna_gs_4_ap.tif", img_gs_ap, "L", 0, 0)
     img_rgb_ap = rgb_allpass(1 / 2, 3584)
     image_save("Lenna_rgb_4_ap.tif", img_rgb_ap, "RGB", 0, 0)
+    pbar.update(1)
     # Questão 5
     edge_gs = edge_gs_detect(img_gs, 1, 3)
     image_save("Lenna_gs_5_ed.tif", edge_gs, "L", 0, 0)
     edge_rgb = edge_rgb_detect(img_color, 1, 3)
     image_save("Lenna_rgb_5_ed.tif", edge_rgb, "RGB", 0, 0)
+    pbar.update(1)

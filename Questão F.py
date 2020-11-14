@@ -1,29 +1,30 @@
-from scipy.signal import bilinear
-from scipy.signal import lfilter
-from scipy.signal import freqz
 from scipy.ndimage import gaussian_filter
-import matplotlib.pyplot as plt
-from scipy.ndimage import sobel
+from warnings import filterwarnings
+from scipy.signal import bilinear
 from scipy.signal import convolve
-from scipy import ndimage
+from scipy.signal import lfilter
 from PIL import Image, ImageOps
+from scipy.ndimage import sobel
+from scipy.signal import freqz
+from cv2 import COLOR_BGR2RGB
 from skimage import feature
+from scipy import ndimage
+from cv2 import cvtColor
+from cv2 import imread
 from tqdm import tqdm
 import pandas as pd
 import numpy as np
-import warnings
 import time
-import cv2
 import sys
 
-warnings.filterwarnings("ignore")
+filterwarnings("ignore")
 
 
 def image_load(image_file):
-    img_color = cv2.imread(image_file, 1)
-    img_gs = cv2.imread(image_file, 0)
+    img_color = imread(image_file, 1)
+    img_gs = imread(image_file, 0)
     image_check(img_color, img_gs)
-    img_color = cv2.cvtColor(cv2.imread(image_file, 1), cv2.COLOR_BGR2RGB)
+    img_color = cvtColor(imread(image_file, 1), COLOR_BGR2RGB)
     pbar.update(1)
     return (img_gs, img_color)
 
@@ -188,7 +189,6 @@ def grayscale_allpass_save(img_gs_ap):
 
 
 def rgb_allpass_save(img_rgb_ap):
-    row = np.clip(img_rgb_ap, 0, 255)
     img = Image.fromarray(np.uint8(img_rgb_ap), "RGB")
     img.save("output/Lenna_rgb_1_ap.tif")
     pbar.update(1)

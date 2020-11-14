@@ -47,7 +47,7 @@ img_gs, img_color = image_load("Lenna.tif")
 
 b = [-1/2, 1]
 a = [1, 1/2]
-
+# Using this number while no artifacts happen, higher tanks performance, lower tanks quality.
 w, h = freqz(b, a, worN = 3584)
 
 #y = lfilter(x = img_color[:,:,0], b = w, a = h)

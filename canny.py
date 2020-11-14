@@ -24,6 +24,7 @@ def image_load(image_file):
     # img_gs_PIL = Image.fromarray(img_gs , 'L')
     # img_gs_PIL.show()
     image_check(img_color, img_gs)
+    # Use once, cv2 format is bs to work with
     img_color = cv2.cvtColor(cv2.imread(image_file, 1), cv2.COLOR_BGR2RGB)
     return (img_gs, img_color)
 
@@ -45,113 +46,93 @@ def image_check(img_color, img_gs):
         time.sleep(0)
     return None
 
-def gaussian_kernel(size, sigma=1):
-    size = int(size) // 2
-    x, y = np.mgrid[-size:size+1, -size:size+1]
-    normal = 1 / (2.0 * np.pi * sigma**2)
-    g =  np.exp(-((x**2 + y**2) / (2.0*sigma**2))) * normal
-    return g
+def edge_gs_detect(image, std_dev, k_size):
+    k_size = int(k_size) // 2
+    x, y = np.mgrid[-k_size : k_size + 1, -k_size : k_size + 1]
+    normal = 1 / (2.0 * np.pi * pow(std_dev, 2))
+    gauss = np.exp(-((pow(x, 2) + pow(y, 2)) / (2.0 * pow(std_dev, 2)))) * normal
+    img_conv = convolve(img_gs, gauss)
 
-def sobel_filters(img):
-        Kx = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], np.float32)
-        Ky = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], np.float32)
+    dx = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], np.float32)
+    dy = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], np.float32)
+    Ix = ndimage.filters.convolve(img_conv, dx)
+    Iy = ndimage.filters.convolve(img_conv, dy)
+    edge = np.hypot(Ix, Iy)
+    edge = edge / edge.max() * 255
+    arctg = np.arctan2(Iy, Ix)
+    
+    edge = no_blur(edge, arctg)
+    edge = finding_white(edge, high = .15, low = .05)
+    edge = finding_black(edge, white = 100, gray = 75)
+    return edge
 
-        Ix = ndimage.filters.convolve(img, Kx)
-        Iy = ndimage.filters.convolve(img, Ky)
+def no_blur(image, arctg):
+    val = np.zeros((len(image), len(image)), dtype=np.int32)
+    side = arctg * 180. / np.pi
+    side[side < 0] += 180
 
-        G = np.hypot(Ix, Iy)
-        G = G / G.max() * 255
-        theta = np.arctan2(Iy, Ix)
-        return (G, theta)
-
-
-def non_max_suppression(img, D):
-    M, N = img.shape
-    Z = np.zeros((M,N), dtype=np.int32)
-    angle = D * 180. / np.pi
-    angle[angle < 0] += 180
-    for i in range(1,M-1):
-        for j in range(1,N-1):
+    for i in range(1,len(image)-1):
+        for j in range(1,len(image)-1):
             q = 255
             r = 255
-
-            #angle 0
-            if (0 <= angle[i,j] < 22.5) or (157.5 <= angle[i,j] <= 180):
-                q = img[i, j+1]
-                r = img[i, j-1]
-            #angle 45
-            elif (22.5 <= angle[i,j] < 67.5):
-                q = img[i+1, j-1]
-                r = img[i-1, j+1]
-            #angle 90
-            elif (67.5 <= angle[i,j] < 112.5):
-                q = img[i+1, j]
-                r = img[i-1, j]
-            #angle 135
-            elif (112.5 <= angle[i,j] < 157.5):
-                q = img[i-1, j-1]
-                r = img[i+1, j+1]
-            if (img[i,j] >= q) and (img[i,j] >= r):
-                Z[i,j] = img[i,j]
+            # 0°
+            if (0 <= side[i,j] < 22.5) or (157.5 <= side[i,j] <= 180):
+                q = image[i, j+1]
+                r = image[i, j-1]
+            # 45°
+            elif (22.5 <= side[i,j] < 67.5):
+                q = image[i+1, j-1]
+                r = image[i-1, j+1]
+            # 90°
+            elif (67.5 <= side[i,j] < 112.5):
+                q = image[i+1, j]
+                r = image[i-1, j]
+            # 135°
+            elif (112.5 <= side[i,j] < 157.5):
+                q = image[i-1, j-1]
+                r = image[i+1, j+1]
+            if (image[i,j] >= q) and (image[i,j] >= r):
+                val[i,j] = image[i,j]
             else:
-                Z[i,j] = 0
-    return Z
+                val[i,j] = 0
+    return val
 
-def threshold(img):
-
-    highThreshold = img.max() * .15
-    lowThreshold = highThreshold * .05
-
-    M, N = img.shape
-    res = np.zeros((M,N), dtype=np.int32)
-
+def finding_white(image, high, low):
+    high = image.max() * high
+    low = high * low
+    bright = np.zeros((len(image), len(image)), dtype=np.int32)
+    # int32, why not.
     weak = np.int32(75)
     strong = np.int32(255)
 
-    strong_i, strong_j = np.where(img >= highThreshold)
-    zeros_i, zeros_j = np.where(img < lowThreshold)
+    strong_i, strong_j = np.where(image >= high)
+    zeros_i, zeros_j = np.where(image < low)
+    weak_i, weak_j = np.where((image <= high) & (image >= low))
 
-    weak_i, weak_j = np.where((img <= highThreshold) & (img >= lowThreshold))
+    bright[strong_i, strong_j] = strong
+    bright[weak_i, weak_j] = weak
 
-    res[strong_i, strong_j] = strong
-    res[weak_i, weak_j] = weak
+    return (bright)
 
-    return (res)
-
-def hysteresis(img):
-    M, N = img.shape
-    weak = 75
-    strong = 255
-
-    for i in range(1, M-1):
-        for j in range(1, N-1):
-            if (img[i,j] == weak):
-                try:
-                    if ((img[i+1, j-1] == strong) or (img[i+1, j] == strong) or (img[i+1, j+1] == strong)
-                        or (img[i, j-1] == strong) or (img[i, j+1] == strong)
-                        or (img[i-1, j-1] == strong) or (img[i-1, j] == strong) or (img[i-1, j+1] == strong)):
-                        img[i, j] = strong
-                    else:
-                        img[i, j] = 0
-                except IndexError as e:
-                    pass
-
-    return img
-
+def finding_black(image, white, gray):
+    for i in range(1, len(image)-1):
+        for j in range(1, len(image)-1):
+            if (image[i,j] == gray):
+                if ((image[i+1, j-1] == white) or (image[i+1, j] == white) or (image[i+1, j+1] == white)
+                    or (image[i, j-1] == white) or (image[i, j+1] == white)
+                    or (image[i-1, j-1] == white) or (image[i-1, j] == white) or (image[i-1, j+1] == white)):
+                    image[i, j] = white
+                else:
+                    image[i, j] = 0
+    return image
 
 img_gs, img_color = image_load("Lenna.tif")
 
-img_cn = convolve(img_gs, gaussian_kernel(3, 1))
-#img_cn = gaussian_filter(img_gs, 1)
+edge_gs = edge_gs_detect(img_gs, 1, 3)
 
-G, theta = sobel_filters(img_cn)
+# Using uint8, else it goes analog ¯\_('.')_/¯
+edge = Image.fromarray(np.uint8(edge_gs), "L")
+orig = Image.fromarray(np.uint8(img_gs), "L")
 
-nm = non_max_suppression(G, theta)
-
-t = threshold(nm)
-
-y = hysteresis(G)
-
-img = Image.fromarray(np.uint8(G), "L")
-
-img.show()
+orig.show()
+edge.show()

@@ -75,10 +75,12 @@ geramos uma imagem apenas com píxeis considerados fortes ressaltados em relaç�
 
 Para verificação dos dados obtidos pelo programa, foram utilizadas 2 imagens similares, uma de 1972 e outra de poucos meses atrás, elas são apresentadas abaixo.
 
-<img src=".doc/Lenna_gs_0.png" title="Léna forsen (1972)" width="200"/>
-<img src=".doc/Lenna_rgb_0.png" title="Léna forsen (1972)" width="200"/>
-<img src=".doc/Madi_gs_0.png" title="Naturally Madi (2020)" width="200"/>
-<img src=".doc/Madi_rgb_0.png" title="Naturally Madi (2020)" width="200"/>
+<p float="left">
+    <img src=".doc/Lenna_gs_0.png" title="Léna forsen (1972)" width="200"/>
+    <img src=".doc/Lenna_rgb_0.png" title="Léna forsen (1972)" width="200"/>
+    <img src=".doc/Madi_gs_0.png" title="Naturally Madi (2020)" width="200"/>
+    <img src=".doc/Madi_rgb_0.png" title="Naturally Madi (2020)" width="200"/>
+</p>
 
 Durante a execução do programa faz-se a aquisição de 1 imagem para teste isolado, utilizamos a função [opencv](https://docs.opencv.org/3.4/), e apos definir a forma que esperamos para trabalhar com as imagens, fazemos a remoção de ruído a partir de um filtro bilinear no eixo X. Obtemos as imagens abaixo.
 

@@ -1,3 +1,10 @@
+#  ___                    _   _   
+# |_ _|__ _  __ _  ___   | \ | |      Iago Nicolas (Necronzero)
+#  | |/ _` |/ _` |/ _ \  |  \| |      https://github.com/IagoNicolas
+#  | | (_| | (_| | (_) | | |\  |_     
+# |___\__,_|\__, |\___/  |_| \_(_)    Ran with python 3.8.6 64-bit
+#           |___/                     @ Thinkpad T480 on Manjaro 20.1 Micah.
+
 from scipy.signal import bilinear
 from scipy.signal import lfilter
 from scipy.signal import freqz
@@ -17,9 +24,11 @@ import sys
 
 def image_load(image_file):
     img_color = cv2.imread(image_file, 1)
+    # by: Iago N.
     # img_color_PIL = Image.fromarray(img_color, 'RGB')
     # img_color_PIL.show()
     img_gs = cv2.imread(image_file, 0)
+    # by: Iago N.
     # img_gs_PIL = Image.fromarray(img_gs , 'L')
     # img_gs_PIL.show()
     image_check(img_color, img_gs)
@@ -33,6 +42,7 @@ def image_check(img_color, img_gs):
         print("\nProgram will now exit")
         sys.exit()
     else:
+        # by: Iago N.
         # print("\nColor image loaded!")
         time.sleep(0)
 
@@ -41,6 +51,7 @@ def image_check(img_color, img_gs):
         print("\nProgram will now exit")
         sys.exit()
     else:
+        # by: Iago N.
         # print("Grayscale image loaded!")
         time.sleep(0)
     return None

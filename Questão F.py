@@ -1,13 +1,17 @@
-from scipy.ndimage import gaussian_filter
+#  ___                    _   _
+# |_ _|__ _  __ _  ___   | \ | |      Iago Nicolas (Necronzero)
+#  | |/ _` |/ _` |/ _ \  |  \| |      https://github.com/IagoNicolas
+#  | | (_| | (_| | (_) | | |\  |_
+# |___\__,_|\__, |\___/  |_| \_(_)    Ran with python 3.8.6 64-bit
+#           |___/                     @ Thinkpad T480 on 5.9.3-1-MANJARO, 20.1 Micah.
+
 from warnings import filterwarnings
 from scipy.signal import bilinear
 from scipy.signal import convolve
 from scipy.signal import lfilter
 from PIL import Image, ImageOps
-from scipy.ndimage import sobel
 from scipy.signal import freqz
 from cv2 import COLOR_BGR2RGB
-from skimage import feature
 from scipy import ndimage
 from cv2 import cvtColor
 from cv2 import imread
@@ -88,8 +92,8 @@ def rgb_filter(img_color, bil_1, bil_2):
             x=pd.DataFrame(img_b_sv_row).loc[:, j], b=bil_1, a=bil_2
         )
 
-    img_rgb_sv_row = np.zeros([512, 512, 3])
-    img_rgb_sv_col = np.zeros([512, 512, 3])
+    img_rgb_sv_row = np.zeros([len(img_color_r_df), len(img_color_r_df), 3])
+    img_rgb_sv_col = np.zeros([len(img_color_r_df), len(img_color_r_df), 3])
 
     img_rgb_sv_row[:, :, 0] = img_r_sv_row
     img_rgb_sv_row[:, :, 1] = img_g_sv_row
@@ -121,6 +125,7 @@ def grayscale_allpass(img_gs, pole, freq_number):
     img_gs_ap_row = np.zeros(shape=[len(img_gs_df), len(img_gs_df)])
     for i in range(0, len(img_gs_df)):
         img_gs_ap_row[i] = all_pass(img_gs_df.loc[i, :], pole, freq_number)
+    img_gs_ap_row = np.clip(img_gs_ap_row, 0, 255)
     return img_gs_ap_row
 
 
@@ -140,11 +145,12 @@ def rgb_allpass(pole, freq_number):
     for i in range(0, len(img_color_b_df)):
         img_b_ap_row[i] = all_pass(img_color_b_df.loc[i, :], pole, freq_number)
 
-    img_rgb_ap_row = np.zeros([512, 512, 3])
+    img_rgb_ap_row = np.zeros([len(img_color_r_df), len(img_color_r_df), 3])
 
     img_rgb_ap_row[:, :, 0] = img_r_ap_row
     img_rgb_ap_row[:, :, 1] = img_g_ap_row
     img_rgb_ap_row[:, :, 2] = img_b_ap_row
+    img_rgb_ap_row = np.clip(img_rgb_ap_row, 0, 255)
     return img_rgb_ap_row
 
 
@@ -156,33 +162,33 @@ def derivative(img):
 
 def no_blur(image, arctg):
     val = np.zeros((len(image), len(image)), dtype=np.int32)
-    side = arctg * 180. / np.pi
+    side = arctg * 180.0 / np.pi
     side[side < 0] += 180
 
-    for i in range(1,len(image)-1):
-        for j in range(1,len(image)-1):
+    for i in range(1, len(image) - 1):
+        for j in range(1, len(image) - 1):
             q = 255
             r = 255
-            #angle 0
-            if (0 <= side[i,j] < 22.5) or (157.5 <= side[i,j] <= 180):
-                q = image[i, j+1]
-                r = image[i, j-1]
-            #angle 45
-            elif (22.5 <= side[i,j] < 67.5):
-                q = image[i+1, j-1]
-                r = image[i-1, j+1]
-            #angle 90
-            elif (67.5 <= side[i,j] < 112.5):
-                q = image[i+1, j]
-                r = image[i-1, j]
-            #angle 135
-            elif (112.5 <= side[i,j] < 157.5):
-                q = image[i-1, j-1]
-                r = image[i+1, j+1]
-            if (image[i,j] >= q) and (image[i,j] >= r):
-                val[i,j] = image[i,j]
+            # 0°    Deg
+            if (0 <= side[i, j] < 22.5) or (157.5 <= side[i, j] <= 180):
+                q = image[i, j + 1]
+                r = image[i, j - 1]
+            # 45°   Deg
+            elif 22.5 <= side[i, j] < 67.5:
+                q = image[i + 1, j - 1]
+                r = image[i - 1, j + 1]
+            # 90°   Deg
+            elif 67.5 <= side[i, j] < 112.5:
+                q = image[i + 1, j]
+                r = image[i - 1, j]
+            # 135°  Deg
+            elif 112.5 <= side[i, j] < 157.5:
+                q = image[i - 1, j - 1]
+                r = image[i + 1, j + 1]
+            if (image[i, j] >= q) and (image[i, j] >= r):
+                val[i, j] = image[i, j]
             else:
-                val[i,j] = 0
+                val[i, j] = 0
     return val
 
 
@@ -197,16 +203,23 @@ def finding_white(image, high, low):
     bright[strong_i, strong_j] = strong
     bright[weak_i, weak_j] = weak
 
-    return (bright)
+    return bright
 
 
 def finding_black(image, white, gray):
-    for i in range(1, len(image)-1):
-        for j in range(1, len(image)-1):
-            if (image[i,j] == gray):
-                if ((image[i+1, j-1] == white) or (image[i+1, j] == white) or (image[i+1, j+1] == white)
-                    or (image[i, j-1] == white) or (image[i, j+1] == white)
-                    or (image[i-1, j-1] == white) or (image[i-1, j] == white) or (image[i-1, j+1] == white)):
+    for i in range(1, len(image) - 1):
+        for j in range(1, len(image) - 1):
+            if image[i, j] == gray:
+                if (
+                    (image[i + 1, j - 1] == white)
+                    or (image[i + 1, j] == white)
+                    or (image[i + 1, j + 1] == white)
+                    or (image[i, j - 1] == white)
+                    or (image[i, j + 1] == white)
+                    or (image[i - 1, j - 1] == white)
+                    or (image[i - 1, j] == white)
+                    or (image[i - 1, j + 1] == white)
+                ):
                     image[i, j] = white
                 else:
                     image[i, j] = 0
@@ -227,10 +240,10 @@ def edge_gs_detect(image, std_dev, k_size):
     edge = np.hypot(Ix, Iy)
     edge = edge / edge.max() * 255
     arctg = np.arctan2(Iy, Ix)
-    
+
     edge = no_blur(edge, arctg)
-    edge = finding_white(edge, high = .15, low = .05)
-    edge = finding_black(edge, white = 100, gray = 75)
+    edge = finding_white(edge, high=0.15, low=0.05)
+    edge = finding_black(edge, white=100, gray=75)
     return edge
 
 
@@ -246,38 +259,43 @@ def edge_rgb_detect(image, std_dev, k_size):
     img_rgb_edge[:, :, 0] = img_color_r_ed
     img_rgb_edge[:, :, 1] = img_color_g_ed
     img_rgb_edge[:, :, 2] = img_color_b_ed
-    
+
     return img_rgb_edge
 
 
 with tqdm(total=5, file=sys.stdout) as pbar:
     # Questão 1
-    img_gs, img_color = image_load("Lenna.tif")
+    image = "Lenna"
+    img_gs, img_color = image_load(image + ".tif")
     pbar.update(1)
     # Questão 2
     bil_1, bil_2 = bilinear(1, 4)
     img_gs_row, img_gs_col = grayscale_filter(img_gs, bil_1, bil_2)
-    image_save("Lenna_gs_1_row.tif", img_gs_row, "L", 0, 0)
-    image_save("Lenna_gs_2_col.tif", img_gs_col, "L", 270, 1)
+    image_save(image + "_gs_1_row.tif", img_gs_row, "L", 0, 0)
+    image_save(image + "_gs_2_col.tif", img_gs_col, "L", 270, 1)
+    pbar.update(0.5)
     img_rgb_row, img_rgb_col = rgb_filter(img_color, bil_1, bil_2)
-    image_save("Lenna_rgb_1_row.tif", img_rgb_row, "RGB", 0, 0)
-    image_save("Lenna_rgb_2_col.tif", img_rgb_col, "RGB", 270, 1)
-    pbar.update(1)
+    image_save(image + "_rgb_1_row.tif", img_rgb_row, "RGB", 0, 0)
+    image_save(image + "_rgb_2_col.tif", img_rgb_col, "RGB", 270, 1)
+    pbar.update(0.5)
     # Questão 3
     img_gs_derivative = derivative(img_gs_col)
-    image_save("Lenna_gs_3_der.tif", img_gs_derivative, "L", 270, 1)
+    image_save(image + "_gs_3_der.tif", img_gs_derivative, "L", 270, 1)
+    pbar.update(0.5)
     img_rgb_derivative = derivative(img_rgb_col)
-    image_save("Lenna_rgb_3_der.tif", img_rgb_derivative, "RGB", 270, 1)
-    pbar.update(1)
+    image_save(image + "_rgb_3_der.tif", img_rgb_derivative, "RGB", 270, 1)
+    pbar.update(0.5)
     # Questão 4
-    img_gs_ap = grayscale_allpass(img_gs, 1 / 2, 3584)
-    image_save("Lenna_gs_4_ap.tif", img_gs_ap, "L", 0, 0)
-    img_rgb_ap = rgb_allpass(1 / 2, 3584)
-    image_save("Lenna_rgb_4_ap.tif", img_rgb_ap, "RGB", 0, 0)
-    pbar.update(1)
+    img_gs_ap = grayscale_allpass(img_gs, 1 / 2, 1024)
+    image_save(image + "_gs_4_ap.tif", img_gs_ap, "L", 0, 0)
+    pbar.update(0.5)
+    img_rgb_ap = rgb_allpass(1 / 2, 1024)  # 3584
+    image_save(image + "_rgb_4_ap.tif", img_rgb_ap, "RGB", 0, 0)
+    pbar.update(0.5)
     # Questão 5
     edge_gs = edge_gs_detect(img_gs, 1, 3)
-    image_save("Lenna_gs_5_ed.tif", edge_gs, "L", 0, 0)
+    image_save(image + "_gs_5_ed.tif", edge_gs, "L", 0, 0)
+    pbar.update(0.5)
     edge_rgb = edge_rgb_detect(img_color, 1, 3)
-    image_save("Lenna_rgb_5_ed.tif", edge_rgb, "RGB", 0, 0)
-    pbar.update(1)
+    image_save(image + "_rgb_5_ed.tif", edge_rgb, "RGB", 0, 0)
+    pbar.update(0.5)

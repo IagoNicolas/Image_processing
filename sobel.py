@@ -56,8 +56,7 @@ def image_check(img_color, img_gs):
         time.sleep(0)
     return None
 
-img_gs, img_color = image_load("Lenna.tif")
-
+img_gs, img_color = image_load("Madi.tif")
 
 im = ndimage.gaussian_filter(img_color, 5)
 

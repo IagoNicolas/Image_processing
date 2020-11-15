@@ -23,11 +23,19 @@ principal o rosto humano.
 
 ### Filtro bilinear
 
-Esse filtro tem como intuito atuar como um interpolador, normalmente utilizado em 2 dimensões, na forma:
+Para filtrar a imagem, fazemos uso de um filtro analógico digitalizado, utilizamos então a transformada z para trazer esse filtro para o campo discreto.
+A transformada z é uma transformação matemática do domínio s para o domínio z.
 
-f(x, y) &asymp; a<sub>0</sub> + a<sub>1</sub>x + a<sub>2</sub>y + a<sub>3</sub>y
+<img src=".doc/Equation_1.png" title="Transformada Z" width="150"/>
 
-h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
+Em que T é o período de amostragem.
+
+Fazemos então o design do filtro passa baixa que será utilizado na entrada do filtro bilinear a partir do seguinte filtro passa baixa com sua função de transferência:
+
+<p float="center">
+    <img src=".doc/Filter_1.png" title="Low Pass filter" height="150"/>
+    <img src=".doc/Filter_2.png" title="Transfer function" height="100"/>
+</p>
 
 ## Metodologia:
 

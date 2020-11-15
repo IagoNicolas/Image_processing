@@ -84,44 +84,53 @@ Para verificação dos dados obtidos pelo programa, foram utilizadas 2 imagens s
 
 Durante a execução do programa faz-se a aquisição de 1 imagem para teste isolado, utilizamos a função [opencv](https://docs.opencv.org/3.4/), e apos definir a forma que esperamos para trabalhar com as imagens, fazemos a remoção de ruído a partir de um filtro bilinear no eixo X. Obtemos as imagens abaixo.
 
-<img src=".doc/Lenna_gs_1_row.png" title="Grayscale row filter" width="200"/>
-<img src=".doc/Lenna_rgb_1_row.png" title="RGB row filter" width="200"/>
-<img src=".doc/Madi_gs_1_row.png" title="Grayscale row filter" width="200"/>
-<img src=".doc/Madi_rgb_1_row.png" title="RGB row filter" width="200"/>
+<p float="left">
+    <img src=".doc/Lenna_gs_1_row.png" title="Grayscale row filter" width="200"/>
+    <img src=".doc/Lenna_rgb_1_row.png" title="RGB row filter" width="200"/>
+    <img src=".doc/Madi_gs_1_row.png" title="Grayscale row filter" width="200"/>
+    <img src=".doc/Madi_rgb_1_row.png" title="RGB row filter" width="200"/>
+</p>
 
 Em seguida, aplicamos o mesmo filtro em Y, mas na entrada, colocamos a imagem que passou pelo filtro no eixo X. Obtemos as seguintes imagens.
 
-<img src=".doc/Lenna_gs_2_col.png" title="Grayscale column filter" width="200"/>
-<img src=".doc/Lenna_rgb_2_col.png" title="RGB column filter" width="200"/>
-<img src=".doc/Madi_gs_2_col.png" title="Grayscale column filter" width="200"/>
-<img src=".doc/Madi_rgb_2_col.png" title="RGB column filter" width="200"/>
+<p float="left">
+    <img src=".doc/Lenna_gs_2_col.png" title="Grayscale column filter" width="200"/>
+    <img src=".doc/Lenna_rgb_2_col.png" title="RGB column filter" width="200"/>
+    <img src=".doc/Madi_gs_2_col.png" title="Grayscale column filter" width="200"/>
+    <img src=".doc/Madi_rgb_2_col.png" title="RGB column filter" width="200"/>
+</p>
 
 # Why this shit is right 
 
 Faz-se a derivada das imagens no eixo X, obtendo como resultado as imagens abaixo. Vale a ressalva de que a imagem de 1972 é claramente mais ruidoza, como podemos ver na derivada RGB.
 
-<img src=".doc/Lenna_gs_3_der.png" title="Grayscale differential" width="200"/>
-<img src=".doc/Lenna_rgb_3_der.png" title="RGB differential" width="200"/>
-<img src=".doc/Madi_gs_3_der.png" title="Grayscale differential" width="200"/>
-<img src=".doc/Madi_rgb_3_der.png" title="RGB differential" width="200"/>
+<p float="left">
+    <img src=".doc/Lenna_gs_3_der.png" title="Grayscale differential" width="200"/>
+    <img src=".doc/Lenna_rgb_3_der.png" title="RGB differential" width="200"/>
+    <img src=".doc/Madi_gs_3_der.png" title="Grayscale differential" width="200"/>
+    <img src=".doc/Madi_rgb_3_der.png" title="RGB differential" width="200"/>
+</p>
 
 # Why this other shit is right 
 
 Além disso, fazemos a implementação de um filtro passa-todas, que resulta nas imagens abaixo.
 
-<img src=".doc/Lenna_gs_4_ap.png" title="Grayscale all-pass" width="200"/>
-<img src=".doc/Lenna_rgb_4_ap.png" title="RGB all-pass" width="200"/>
-<img src=".doc/Madi_gs_4_ap.png" title="Grayscale all-pass" width="200"/>
-<img src=".doc/Madi_rgb_4_ap.png" title="RGB all-pass" width="200"/>
-
+<p float="left">
+    <img src=".doc/Lenna_gs_4_ap.png" title="Grayscale all-pass" width="200"/>
+    <img src=".doc/Lenna_rgb_4_ap.png" title="RGB all-pass" width="200"/>
+    <img src=".doc/Madi_gs_4_ap.png" title="Grayscale all-pass" width="200"/>
+    <img src=".doc/Madi_rgb_4_ap.png" title="RGB all-pass" width="200"/>
+</p>
 # Why this 3rd shit is right 
 
 E por fim, implementamos um algoritmo para edge detection, que com bom resultado entrega as imagens abaixo.
 
-<img src=".doc/Lenna_gs_5_ed.png" title="Grayscale edge detection" width="200"/>
-<img src=".doc/Lenna_rgb_5_ed.png" title="RGB edge detection" width="200"/>
-<img src=".doc/Madi_gs_5_ed.png" title="Grayscale edge detection" width="200"/>
-<img src=".doc/Madi_rgb_5_ed.png" title="RGB edge detection" width="200"/>
+<p float="left">
+    <img src=".doc/Lenna_gs_5_ed.png" title="Grayscale edge detection" width="200"/>
+    <img src=".doc/Lenna_rgb_5_ed.png" title="RGB edge detection" width="200"/>
+    <img src=".doc/Madi_gs_5_ed.png" title="Grayscale edge detection" width="200"/>
+    <img src=".doc/Madi_rgb_5_ed.png" title="RGB edge detection" width="200"/>
+</p>
 
 # Why this last shit is right 
 

@@ -21,7 +21,7 @@ principal o rosto humano.
 
 ## Fundamentação teórica:
 
-### Filtro bilinear
+### Filtro passa baixa
 
 Para filtrar a imagem, fazemos uso de um filtro analógico digitalizado, utilizamos então a transformada z para trazer esse filtro para o campo discreto.
 A transformada z é uma transformação matemática do domínio s para o domínio z.
@@ -30,12 +30,24 @@ A transformada z é uma transformação matemática do domínio s para o domíni
 
 Em que T é o período de amostragem.
 
-Fazemos então o design do filtro passa baixa que será utilizado na entrada do filtro bilinear a partir do seguinte filtro passa baixa com sua função de transferência:
+Fazemos então o design do filtro passa baixa que será utilizado como entrada para o filtro bilinear a partir de um design passa-baixa, pois o nosso foco é suavizar a imagem.
 
-<p float="center">
-    <img src=".doc/Filter_1.png" title="Low Pass filter" height="150"/>
-    <img src=".doc/Filter_2.png" title="Transfer function" height="100"/>
+Utilizando valores de R = 100k&ohm; e C = 150&micro;F, temos
+um filtro com &omega;<sub>c</sub> = 15Hz que terá o denominador e o numerador da função de transferência iguais a 1 e 4.
+
+Tendo feito o design desse filtro, podemos aplicar na função signal bilinear do [Scipy](https://docs.scipy.org/doc/scipy/reference/signal.html) que nos entregará o filtro IIR.
+
+### Derivada
+
+Nessa etapa, fazemos a derivada em linhas e em seguida em colunas. Sabemos portanto que temos uma função do tipo:
+
+<p float="left">
+    <img src=".doc/Filter_4.png" title="Low Pass filter" height="80"/>
 </p>
+
+Aplicando a função diff da biblioteca [Numpy](https://numpy.org/doc/) e dividindo pelo intervalo utilizado, temos os resultados observados nas imagens.
+
+
 
 ## Metodologia:
 
@@ -124,11 +136,16 @@ Faz-se a derivada das imagens no eixo X, obtendo como resultado as imagens abaix
 Além disso, fazemos a implementação de um filtro passa-todas, que resulta nas imagens abaixo.
 
 <p float="left">
-    <img src=".doc/Lenna_gs_4_ap.png" title="Grayscale all-pass" width="200"/>
-    <img src=".doc/Lenna_rgb_4_ap.png" title="RGB all-pass" width="200"/>
-    <img src=".doc/Madi_gs_4_ap.png" title="Grayscale all-pass" width="200"/>
-    <img src=".doc/Madi_rgb_4_ap.png" title="RGB all-pass" width="200"/>
+    <img src=".doc/Lenna_gs_4_ap_re.png" title="Gs Real all-pass" width="200"/>
+    <img src=".doc/Lenna_gs_4_ap_im.png" title="Gs Imag all-pass" width="200"/>
+    <img src=".doc/Lenna_rgb_4_ap_re.png" title="RGB Real all-pass" width="200"/>
+    <img src=".doc/Lenna_rgb_4_ap_im.png" title="RGB Imag all-pass" width="200"/>
+    <img src=".doc/Madi_gs_4_ap_re.png" title="Gs Real all-pass" width="200"/>
+    <img src=".doc/Madi_gs_4_ap_im.png" title="Gs Imag all-pass" width="200"/>
+    <img src=".doc/Madi_rgb_4_ap_re.png" title="RGB Real all-pass" width="200"/>
+    <img src=".doc/Madi_rgb_4_ap_im.png" title="RGB Imag all-pass" width="200"/>
 </p>
+
 # Why this 3rd shit is right 
 
 E por fim, implementamos um algoritmo para edge detection, que com bom resultado entrega as imagens abaixo.

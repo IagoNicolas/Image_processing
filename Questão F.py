@@ -121,42 +121,47 @@ def all_pass(d1_array, pole, freq_number):
 
 
 def grayscale_allpass(img_gs, pole, freq_number):
-    img_gs_df = pd.DataFrame(img_gs)
-    img_gs_ap_row = np.zeros(shape=[len(img_gs_df), len(img_gs_df)])
-    for i in range(0, len(img_gs_df)):
-        img_gs_ap_row[i] = all_pass(img_gs_df.loc[i, :], pole, freq_number)
-    img_gs_ap_row = np.clip(img_gs_ap_row, 0, 255)
-    return img_gs_ap_row
+    img_gs_df = img_gs
+    img_gs_ap_row = all_pass(img_gs_df, pole, freq_number)
+    img_gs_ap_real = np.real(img_gs_ap_row)
+    img_gs_ap_imag = np.imag(img_gs_ap_row)
+    
+    img_gs_ap_real = np.clip(img_gs_ap_real, 0, 255)
+    img_gs_ap_imag = np.clip(img_gs_ap_imag, 0 ,255)
+    
+    return img_gs_ap_real, img_gs_ap_imag
 
 
 def rgb_allpass(pole, freq_number):
     img_color_r_df = pd.DataFrame(img_color[:, :, 0])
     img_color_g_df = pd.DataFrame(img_color[:, :, 1])
     img_color_b_df = pd.DataFrame(img_color[:, :, 2])
-    img_r_ap_row = np.zeros(shape=[len(img_color_r_df), len(img_color_r_df)])
-    img_g_ap_row = np.zeros(shape=[len(img_color_g_df), len(img_color_g_df)])
-    img_b_ap_row = np.zeros(shape=[len(img_color_b_df), len(img_color_b_df)])
-    for i in range(0, len(img_color_r_df)):
-        img_r_ap_row[i] = all_pass(img_color_r_df.loc[i, :], pole, freq_number)
+    # No reason to do it inside a for, the function already does the row by 
+    # row reading/processing what was happening was, that i  added overhead 
+    # to an already unoptimized non threaded/non multiprocessed program.
+    img_r_ap_row = all_pass(img_color_r_df, pole, freq_number)
+    img_g_ap_row = all_pass(img_color_g_df, pole, freq_number)
+    img_b_ap_row = all_pass(img_color_b_df, pole, freq_number)
 
-    for i in range(0, len(img_color_g_df)):
-        img_g_ap_row[i] = all_pass(img_color_g_df.loc[i, :], pole, freq_number)
+    img_rgb_ap_re = np.zeros([len(img_color_r_df), len(img_color_r_df), 3])
+    img_rgb_ap_im = np.zeros([len(img_color_r_df), len(img_color_r_df), 3])
 
-    for i in range(0, len(img_color_b_df)):
-        img_b_ap_row[i] = all_pass(img_color_b_df.loc[i, :], pole, freq_number)
+    img_rgb_ap_re[:, :, 0] = np.real(img_r_ap_row)
+    img_rgb_ap_im[:, :, 0] = np.imag(img_r_ap_row)
+    img_rgb_ap_re[:, :, 1] = np.real(img_g_ap_row)
+    img_rgb_ap_im[:, :, 1] = np.imag(img_g_ap_row)
+    img_rgb_ap_re[:, :, 2] = np.real(img_b_ap_row)
+    img_rgb_ap_im[:, :, 2] = np.imag(img_b_ap_row)
+    
+    img_rgb_ap_re = np.clip(img_rgb_ap_re, 0, 255)
+    img_rgb_ap_im = np.clip(img_rgb_ap_im, 0, 255)
+    
+    return img_rgb_ap_re, img_rgb_ap_im
 
-    img_rgb_ap_row = np.zeros([len(img_color_r_df), len(img_color_r_df), 3])
 
-    img_rgb_ap_row[:, :, 0] = img_r_ap_row
-    img_rgb_ap_row[:, :, 1] = img_g_ap_row
-    img_rgb_ap_row[:, :, 2] = img_b_ap_row
-    img_rgb_ap_row = np.clip(img_rgb_ap_row, 0, 255)
-    return img_rgb_ap_row
-
-
-def derivative(img):
-    img_der_hor = np.diff(img, n=1, axis=0)  # horizontal derivative
-    img_der_ver = np.diff(img_der_hor, n=1, axis=1)  # vertical derivative
+def derivative(img, h):
+    img_der_hor = np.diff(img, n=h, axis=0)/h
+    img_der_ver = np.diff(img_der_hor, n=h, axis=1)/h
     return img_der_ver
 
 
@@ -263,9 +268,9 @@ def edge_rgb_detect(image, std_dev, k_size):
     return img_rgb_edge
 
 
-with tqdm(total=5, file=sys.stdout) as pbar:
+with tqdm(total=5., file=sys.stdout) as pbar:
     # Questão 1
-    image = "Madi"
+    image = "Nzthaly"
     img_gs, img_color = image_load(image + ".tif")
     pbar.update(1)
     # Questão 2
@@ -279,18 +284,20 @@ with tqdm(total=5, file=sys.stdout) as pbar:
     image_save(image + "_rgb_2_col.tif", img_rgb_col, "RGB", 270, 1)
     pbar.update(0.5)
     # Questão 3
-    img_gs_derivative = derivative(img_gs_col)
+    img_gs_derivative = derivative(img_gs_col, 1)
     image_save(image + "_gs_3_der.tif", img_gs_derivative, "L", 270, 1)
     pbar.update(0.5)
-    img_rgb_derivative = derivative(img_rgb_col)
+    img_rgb_derivative = derivative(img_rgb_col, 1)
     image_save(image + "_rgb_3_der.tif", img_rgb_derivative, "RGB", 270, 1)
     pbar.update(0.5)
     # Questão 4
-    img_gs_ap = grayscale_allpass(img_gs, 1 / 2, 1024)
-    image_save(image + "_gs_4_ap.tif", img_gs_ap, "L", 0, 0)
+    img_gs_ap_real, img_gs_ap_imag = grayscale_allpass(img_gs, 1 / 2, 1024)
+    image_save(image + "_gs_4_ap_re.tif", img_gs_ap_real, "L", 0, 0)
+    image_save(image + "_gs_4_ap_im.tif", img_gs_ap_imag, "L", 0, 0)
     pbar.update(0.5)
-    img_rgb_ap = rgb_allpass(1 / 2, 1024)  # 3584
-    image_save(image + "_rgb_4_ap.tif", img_rgb_ap, "RGB", 0, 0)
+    img_rgb_ap_real, img_rgb_ap_imag = rgb_allpass(1 / 2, 1024)  # 3584
+    image_save(image + "_rgb_4_ap_re.tif", img_rgb_ap_real, "RGB", 0, 0)
+    image_save(image + "_rgb_4_ap_im.tif", img_rgb_ap_imag, "RGB", 0, 0)
     pbar.update(0.5)
     # Questão 5
     edge_gs = edge_gs_detect(img_gs, 1, 3)

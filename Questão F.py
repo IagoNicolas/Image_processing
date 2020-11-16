@@ -2,7 +2,7 @@
 # |_ _|__ _  __ _  ___   | \ | |      Iago Nicolas (Necronzero)
 #  | |/ _` |/ _` |/ _ \  |  \| |      https://github.com/IagoNicolas
 #  | | (_| | (_| | (_) | | |\  |_
-# |___\__,_|\__, |\___/  |_| \_(_)    Ran with python 3.8.6 64-bit
+# |___\__,_|\__, |\___/  |_| \_(_)    Works with python 3.8.6 64-bit
 #           |___/                     @ Thinkpad T480 on 5.9.3-1-MANJARO, 20.1 Micah.
 
 from warnings import filterwarnings
@@ -136,6 +136,7 @@ def rgb_allpass(pole, freq_number):
     img_color_r_df = pd.DataFrame(img_color[:, :, 0])
     img_color_g_df = pd.DataFrame(img_color[:, :, 1])
     img_color_b_df = pd.DataFrame(img_color[:, :, 2])
+    # by: Iago N.
     # No reason to do it inside a for, the function already does the row by 
     # row reading/processing what was happening was, that i  added overhead 
     # to an already unoptimized non threaded/non multiprocessed program.

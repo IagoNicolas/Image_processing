@@ -67,9 +67,23 @@ Quando desejamos extrair uma imagem que tenha o foco em bordas de objetos, ou se
 
 ### Detecção de bordas:
 
-Para esse ultimo filtro, o resultado da derivação poderia ser utilizado, mas com objetivo de melhorar a precisão, faz-se uso de um filtro gaussiano, pois a sua efetividade é maior dado o fato de que o mesmo faz uso de um kernel de tamanho n+1 tanto no eixo X quanto no eixo Y, enquanto os procedimentos aplicados anteriormente se limitavam a um dos eixos ou um dos eixos por vez.
+Para esse ultimo filtro, o resultado da derivação poderia ser utilizado, mas com objetivo de melhorar a precisão, faz-se uso de um filtro gaussiano, pois a sua efetividade é maior dado o fato de que o mesmo faz uso de um *kernel* de tamanho n+1 tanto no eixo X quanto no eixo Y, enquanto os procedimentos aplicados anteriormente se limitavam a um dos eixos ou um dos eixos por vez.
+Exemplificamos a convolução realizada com a imagem abaixo. O kernel utilizado tem, no entanto, valores diferentes e formato 5x5.
 
-Para complementar, aplicamos outros 3 filtros para separar píxeis em bordas de píxeis fora de bordas e por último geramos uma imagem apenas com píxeis considerados fortes ressaltados em relação ao fundo preto.
+<img src=".doc/Filter_2.png" title="Kernel gaussiano" width="800"/>
+
+Uma das vantagens dessa aplicação é a não perda de intensidade das imagens, tendo efetividade superior ao filtro passa-baixa aplicado acima.
+
+Para complementar, aplicamos outros 3 filtros para separar píxeis em bordas de píxeis fora de bordas. Fazemos essa separação a partir do cálculo do gradiente da imagem. Se declararmos K<sub>x</sub> e K<sub>y</sub> como kerneis Sobel representados abaixo, podemos fazer convoluções entre a imagem suavizada e os kerneis abaixo.
+
+<img src=".doc/Filter_4.png" title="Kernel gaussiano" width="200"/>
+
+Assim obtemos magnitude e ângulo do gradiente. Esse resultado é apenas uma detecção de mudança de contraste ocorrida na imagem, as bordas detectadas são, portanto, suaves assim como a imagem original.
+
+Para resolver esse problema, fazemos a remoção com base em valores minimos e máximos de branco e preto, pois assim escolhemos os valores mais fortes dentre os que foram escolhidos anteriormente como magnitude.
+Após essa aplicação, temos resultados similares aos obtidos a partir das derivadas.
+
+Por último recorremos à mineração de píxeis medianos, extraindo os píxeis que são fortes verificando os arredores, caso algum píxel ao redor seja branco forte, podemos fazer um branco mediano ser considerado branco forte.
 
 ## Análise:
 

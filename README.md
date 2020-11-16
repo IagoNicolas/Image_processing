@@ -127,7 +127,7 @@ Faz-se a derivada das imagens no eixo X, obtendo como resultado as imagens abaix
 
 Vemos então que as imagens em RGB entregam resultados melhores para aplicações de detecção de bordas de objetos.
 
-Em seguida, fazemos a implementação de um filtro passa-todas com polos em 1/2, que resulta nas imagens abaixo. Os valores aplicados podem ser modificados a desejo do usuário, se limitando apenas a um *range* de -1 &lt; P &lt; 1. Definimos esse range para que o filtro esteja dentro das condições projetadas  .
+Em seguida, fazemos a implementação de um filtro passa-todas com polo P = 1/2, que resulta nas imagens abaixo. Os valores aplicados em P podem ser modificados, se limitando apenas à recomendação de *range* em que -1 &lt; P &lt; 1. Definimos esse *range* para que o filtro esteja dentro das condições projetadas  .
 
 <p float="left">
     <img src=".doc/Lenna_gs_4_ap_re.png" title="Gs Real all-pass" width="200"/>

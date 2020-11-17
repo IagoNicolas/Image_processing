@@ -271,7 +271,7 @@ def edge_rgb_detect(image, std_dev, k_size):
 
 with tqdm(total=5., file=sys.stdout) as pbar:
     # Questão 1
-    image = "Nzthaly"
+    image = "Lenna"
     img_gs, img_color = image_load(image + ".tif")
     pbar.update(1)
     # Questão 2

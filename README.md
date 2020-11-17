@@ -15,16 +15,17 @@ Nesse relatório, há a atuação da etapa 1 em um dataset reduzido, focando em 
 
 ### Filtro passa-baixa
 
-Para suavizar a imagem, fazemos uso de um filtro analógico digitalizado, o metodo surge a partir transformada z que consegue trazer esse filtro para o campo discreto.
-A transformada z é uma transformação matemática do domínio s para o domínio z.
+Para suavizar a imagem, fazemos uso de um filtro analógico passa-baixa digitalizado, o método surge a partir transformada z que consegue trazer esse filtro para o campo discreto.
+A transformada z é uma transformação matemática do domínio s para o domínio z a partir da substituição da variável s na função de transferência de acordo com a equação utilizada abaixo.
 
 <img src=".doc/Equation_1.png" title="Transformada Z" width="150"/>
 
 Em que T é o período de amostragem.
 
-Fazemos então o design do filtro que será utilizado como entrada para o filtro bilinear a partir de um filtro analógico passa-baixa, pois o nosso foco é suavizar a imagem.
+Fazemos então o design do filtro que será utilizado como entrada para a função bilinear a partir de um filtro analógico passa-baixa, pois o nosso foco é suavizar a imagem.
 
 Utilizando valores de R = 100k&ohm; e C = 150&micro;F, temos
+
 um filtro com &omega;<sub>c</sub> = 15Hz que terá o denominador e o numerador da função de transferência iguais a 1 e 4.
 
 Obtemos então, um filtro com um comportamento similar ao exibido abaixo.
@@ -130,19 +131,17 @@ Vemos então que as imagens em RGB entregam resultados melhores para aplicaçõe
 Em seguida, fazemos a implementação de um filtro passa-todas com polo P = 1/2, que resulta nas imagens abaixo. Os valores aplicados em P podem ser modificados, se limitando apenas à recomendação de *range* em que -1 &lt; P &lt; 1. Definimos esse *range* para que o filtro esteja dentro das condições projetadas  .
 
 <p float="left">
-    <img src=".doc/Lenna_gs_4_ap_re.png" title="Gs Real all-pass" width="200"/>
-    <img src=".doc/Lenna_gs_4_ap_im.png" title="Gs Imag all-pass" width="200"/>
-    <img src=".doc/Lenna_rgb_4_ap_re.png" title="RGB Real all-pass" width="200"/>
-    <img src=".doc/Lenna_rgb_4_ap_im.png" title="RGB Imag all-pass" width="200"/>
-    <img src=".doc/Madi_gs_4_ap_re.png" title="Gs Real all-pass" width="200"/>
-    <img src=".doc/Madi_gs_4_ap_im.png" title="Gs Imag all-pass" width="200"/>
-    <img src=".doc/Madi_rgb_4_ap_re.png" title="RGB Real all-pass" width="200"/>
-    <img src=".doc/Madi_rgb_4_ap_im.png" title="RGB Imag all-pass" width="200"/>
+    <img src=".doc/Lenna_gs_4_ap_row.png" title="Gs Row all-pass" width="200"/>
+    <img src=".doc/Lenna_gs_4_ap_col.png" title="Gs Col all-pass" width="200"/>
+    <img src=".doc/Lenna_rgb_4_ap_row.png" title="RGB Row all-pass" width="200"/>
+    <img src=".doc/Lenna_rgb_4_ap_col.png" title="RGB Col all-pass" width="200"/>
+    <img src=".doc/Madi_gs_4_ap_row.png" title="Gs Row all-pass" width="200"/>
+    <img src=".doc/Madi_gs_4_ap_col.png" title="Gs Col all-pass" width="200"/>
+    <img src=".doc/Madi_rgb_4_ap_row.png" title="RGB Row all-pass" width="200"/>
+    <img src=".doc/Madi_rgb_4_ap_col.png" title="RGB Col all-pass" width="200"/>
 </p>
 
-# Is this abomination above even right?
-
-E por fim, implementamos um algoritmo para detecção de bordas, que entrega as imagens abaixo. Vemos que a imagem de 1972 tem um resultado muito superior após a detecção de bordas.
+E por fim, implementamos um algoritmo para detecção de bordas, que entrega as imagens abaixo. Vemos que a imagem que estava mais ruidoza em sua derivada, é a que tem melhor detecção de bordas.
 
 <p float="left">
     <img src=".doc/Lenna_gs_5_ed.png" title="Grayscale edge detection" width="200"/>

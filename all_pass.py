@@ -62,17 +62,14 @@ a = [1, 1/2]
 # Using this N° of instances while no artifacts happen,
 # higher tanks performance, lower tanks quality.
 # Is this even working?
-w, h = freqz(b, a, worN = 2560)
+w, h = freqz(b, a, worN = 1024)
 
-k = lfilter(x = img_color[:,:,0], b = w, a = h)
+k = lfilter(x = img_color[:,:,:], b = w, a = h)
 # by: Iago N.
 # k = lfilter(x = img_gs, b = w, a = h)
 
-x = np.real(k)
-y = np.imag(k)
+out2 = np.fft.fft2(k)
 
-z = x+y
-
-img = Image.fromarray(np.uint8(z), "L")
+img = Image.fromarray(np.uint8(out2), "RGB")
 
 img.show()

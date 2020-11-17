@@ -32,7 +32,7 @@ Foi projetado, então, um filtro com um comportamento similar ao exibido abaixo.
     <img src=".doc/Filter_2.jpg" title="Low Pass filter" height="150"/>
 </p>
 
-Tendo feito o projeto desse filtro, podemos aplicar na função signal.bilinear() do [Scipy](https://docs.scipy.org/doc/scipy/reference/signal.html) que nos entregará o filtro IIR aplicável à imagem.
+Tendo feito o projeto desse filtro, podemos aplicar a função bilinear da biblioteca [Scipy](https://docs.scipy.org/doc/scipy/reference/signal.html), que nos entregará um filtro IIR aplicável à imagem.
 
 ### Derivada
 

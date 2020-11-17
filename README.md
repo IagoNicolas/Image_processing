@@ -24,9 +24,7 @@ Em que T é o período de amostragem.
 
 Fazemos então o design do filtro que será utilizado como entrada para a função bilinear a partir de um filtro analógico passa-baixa, pois o nosso foco é suavizar a imagem.
 
-Utilizando valores de R = 100k&ohm; e C = 150&micro;F, temos
-
-um filtro com F<sub>c</sub> = 2.39Hz que tem denominador = 1 e numerador = 4 na função de transferência.
+Utilizando valores de R = 100k&ohm; e C = 150&micro;F, temos um filtro com F<sub>c</sub> = 2.39Hz que tem denominador = 1 e numerador = 4 na função de transferência.
 
 Foi projetado, então, um filtro com um comportamento similar ao exibido abaixo.
 

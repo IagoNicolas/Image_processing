@@ -62,6 +62,11 @@ a = [1, 1/2]
 # Using this N° of instances while no artifacts happen,
 # higher tanks performance, lower tanks quality.
 # Is this even working?
+#
+# YES, but worN has to be 2*len(image).
+#
+# DON'T TRY ON 4K IMAGES AGAIN. Since this program is 
+# single threaded, no ones pc will run this fast.
 w, h = freqz(b, a, worN = 1024)
 
 k = lfilter(x = img_color[:,:,:], b = w, a = h)

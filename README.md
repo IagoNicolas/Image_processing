@@ -1,4 +1,9 @@
 # Processamento de imagem
+
+## Antes da leitura:
+
+Dependendo do leitor markdown utilizado, algumas das imagens podem aparecer completamente pretas, erro causado pela compressão mal utilizada. Recomenda-se a visualização desse documento no [Visual Studio Code](https://code.visualstudio.com/download) para evitar erros não relacionados a este projeto (upstream).
+
 ## Resumo:
 
 A área visão computacional envolve a percepção e a inteligência humana, o que a torna muito interessante para estudos e pesquisas, sabendo que com ela, pode-se copiar o comportamento humano em computadores por meio de câmeras, entregando inteligência a máquinas com aplicações notáveis em diversos campos, como ecologia, medicina, indústria automotiva, mercado financeiro e segurança.
@@ -92,7 +97,7 @@ Tendo percorrido essas etapas, temos por fim uma imagem com bordas detectadas. O
 
 ## Análise:
 
-Para verificação dos dados obtidos pelo programa, foram utilizadas 2 imagens similares, uma de 1972 ([Lena Söderberg](https://en.wikipedia.org/wiki/Lena_Fors%C3%A9n)) e outra de poucos meses atrás ([Naturally_Madi](https://www.instagram.com/naturally_madi/)), elas são apresentadas abaixo em sua original e em preto e branco.
+Para verificação dos dados obtidos pelo programa, foram utilizadas 2 imagens similares, uma de 1972 ([Lena Söderberg](https://en.wikipedia.org/wiki/Lena_Fors%C3%A9n)) e outra de poucos meses atrás ([Naturally_Madi](https://www.instagram.com/naturally_madi/)), elas são apresentadas abaixo em sua forma original e preto e branco.
 
 <p float="left">
     <img src=".doc/Lenna_gs_0.png" title="Lena forsen (1972)" width="200"/>
@@ -101,7 +106,7 @@ Para verificação dos dados obtidos pelo programa, foram utilizadas 2 imagens s
     <img src=".doc/Madi_rgb_0.png" title="Naturally_Madi (2020)" width="200"/>
 </p>
 
-Durante a execução do programa faz-se a aquisição de 1 imagem RGB que é separada em duas matrizes, uma RBG e outra preto e branco, utilizamos a função [opencv](https://docs.opencv.org/3.4/), e após converter a matriz de RBG para RGB, fazemos a remoção de ruído a partir do filtro bilinear no eixo X (filtro de linhas). Obtemos as imagens abaixo após a a filtragem inicial.
+Durante a execução do programa faz-se a aquisição de uma imagem RGB que é separada em duas matrizes, uma BGR e outra preto e branco, utilizamos a biblioteca [opencv](https://docs.opencv.org/3.4/), e após converter a matriz de BGR para RGB, fazemos a remoção de ruído a partir do filtro bilinear no eixo X (filtro de linhas). Obtemos as imagens abaixo após a a filtragem inicial.
 
 <p float="left">
     <img src=".doc/Lenna_gs_1_row.png" title="Lena: Grayscale row filter" width="200"/>
@@ -119,9 +124,9 @@ Em seguida, aplicamos o mesmo filtro em Y (filtro de colunas), mas na entrada, c
     <img src=".doc/Madi_rgb_2_col.png" title="Madi: RGB column filter" width="200"/>
 </p>
 
-A partir dos dois resultados acima, podemos validar que as imagens estão corretas pois o filtro passa-baixa está reduzindo a energia na imagem. Caso seja feito o envio da imagem sem processamento para a etapa seguinte, acabamos com um resultado com alto ruído.
+A partir dos dois resultados acima, podemos validar que as imagens estão corretas, pois o filtro passa-baixa está fazendo bem o seu papel de reduzir a energia da imagem. Essa etapa é necessária pos caso seja feito o envio da imagem sem processamento para a etapa seguinte, acabamos com um resultado com alto ruído.
 
-Faz-se, em seguida, a derivada das imagens no eixo X (derivada das linhas), obtendo como resultado as imagens abaixo. Vale a ressalva de que a imagem de 1972 é claramente mais ruidoza, como podemos ver na derivada RGB, o que não é um problema, pois o ruído consiste de pontos de baixa energia que não afetarão etapas seguintes.
+Faz-se, em seguida, a derivada das imagens no eixo X (derivada das linhas), obtendo como resultado as imagens abaixo. Vale a ressalva de que a imagem de 1972 é claramente mais ruidoza, como podemos ver na derivada RGB, o que não é um problema, pois o ruído consiste majoritatiamente de pontos de baixa energia que não afetarão etapas seguintes.
 
 <p float="left">
     <img src=".doc/Lenna_gs_3_der.png" title="Lena: Grayscale differential" width="200"/>

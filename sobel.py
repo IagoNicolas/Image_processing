@@ -1,9 +1,9 @@
 #  ___                    _   _   
-# |_ _|__ _  __ _  ___   | \ | |      Iago Nicolas (Necronzero)
+# |_ _|__ _  __ _  ___   | \ | |      Iago Nicolas
 #  | |/ _` |/ _` |/ _ \  |  \| |      https://github.com/IagoNicolas
 #  | | (_| | (_| | (_) | | |\  |_     
 # |___\__,_|\__, |\___/  |_| \_(_)    Works with python 3.8.6 64-bit
-#           |___/                     @ Thinkpad T480 on Manjaro 20.1 Micah.
+#           |___/                     @ Thinkpad T480 on Manjaro 20.1 Mikah.
 
 from scipy.signal import bilinear
 from scipy.signal import lfilter

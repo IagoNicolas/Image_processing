@@ -1,9 +1,9 @@
 #  ___                    _   _
-# |_ _|__ _  __ _  ___   | \ | |      Iago Nicolas (Necronzero)
+# |_ _|__ _  __ _  ___   | \ | |      Iago Nicolas
 #  | |/ _` |/ _` |/ _ \  |  \| |      https://github.com/IagoNicolas
 #  | | (_| | (_| | (_) | | |\  |_
 # |___\__,_|\__, |\___/  |_| \_(_)    Works with python 3.8.6 64-bit
-#           |___/                     @ Thinkpad T480 on 5.9.3-1-MANJARO, 20.1 Micah.
+#           |___/                     @ Thinkpad T480 on 5.9.3-1-MANJARO, 20.1 Mikah.
 
 from warnings import filterwarnings
 from scipy.signal import bilinear

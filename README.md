@@ -173,12 +173,12 @@ Por fim, podemos tirar do trabalho desenvolvido que com o filtro correto, conseg
 
 **Scipy**\
 Scipy signal processing\
-Disponível em: https://docs.scipy.org/doc/scipy/reference/signal.html/\
+Disponível em: https://docs.scipy.org/doc/scipy/reference/signal.html/ \
 Acesso em: 16/11/2020
 
 **Numpy**:\
 NumPy v1.19 Manual\
-Disponível em: https://numpy.org/doc/stable/\
+Disponível em: https://numpy.org/doc/stable/ \
 Acesso em: 14/11/2020
 
 **Scipy-Lectures**\
@@ -190,46 +190,46 @@ Acesso em: 15/11/2020
 **Electrical 4 U**\
 Por: Vidya Muthukrishnan\
 Active Low Pass Filter: Design and Applications\
-Disponível em: https://www.electrical4u.com/active-low-pass-filter/\
+Disponível em: https://www.electrical4u.com/active-low-pass-filter/ \
 Acesso em: 15/11/2020
 
 **Wikipedia**\
 All-pass filter\
-Disponível em: https://en.wikipedia.org/wiki/All-pass_filter/\
+Disponível em: https://en.wikipedia.org/wiki/All-pass_filter/ \
 Acesso em: 05/11/2020
 
 **Wikipedia**\
 Digital image processing\
-Disponível em: https://en.wikipedia.org/wiki/Digital_image_processing/\
+Disponível em: https://en.wikipedia.org/wiki/Digital_image_processing/ \
 Acesso em: 02/11/2020
 
 **Wikipedia**\
 Gaussian filter\
-Disponível em: https://en.wikipedia.org/wiki/Gaussian_filter/\
+Disponível em: https://en.wikipedia.org/wiki/Gaussian_filter/ \
 Acesso em: 06/11/2020
 
 **Wikipedia**\
 Sobel operator\
-Disponível em: https://en.wikipedia.org/wiki/Sobel_operator/\
+Disponível em: https://en.wikipedia.org/wiki/Sobel_operator/ \
 Acesso em: 06/11/2020
 
 **Data carpentry**\
 Image Processing with Python: Edge Detection\
-Disponível em: https://datacarpentry.org/image-processing/08-edge-detection/\
+Disponível em: https://datacarpentry.org/image-processing/08-edge-detection/ \
 Acesso em: 14/11/2020
 
 **Edge Detection Tutorial**\
 Por: Bill Green
-Disponível em: http://www.doc.gold.ac.uk/~mas02fl/MSC101/ImageProcess/edge.html/\
+Disponível em: http://www.doc.gold.ac.uk/~mas02fl/MSC101/ImageProcess/edge.html/ \
 Acesso em: 03/11/2020
 
 **Towards data science**\
 Edge Detection in Python\
 Por: Ritvik Kharkar\
-Disponível em: https://towardsdatascience.com/edge-detection-in-python-a3c263a13e03/\
+Disponível em: https://towardsdatascience.com/edge-detection-in-python-a3c263a13e03/ \
 Acesso em: 14/11/2020
 
 **Scikit-image**\
 Canny edge detector\
-Disponível em: https://scikit-image.org/docs/dev/auto_examples/edges/plot_canny.html/\
+Disponível em: https://scikit-image.org/docs/dev/auto_examples/edges/plot_canny.html/ \
 Acesso em: 02/11/2020

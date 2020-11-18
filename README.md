@@ -150,6 +150,8 @@ Aplicamos às imagens o filtro no eixo X (linhas) e em seguida no eixo Y (coluna
     <img src=".doc/Madi_rgb_4_ap_col.png" title="Madi: RGB Column all-pass" width="200"/>
 </p>
 
+Vemos que o filtro passa todas apenas desloca a fase da imagem, sem modificar a sua amplitude, o que fica claro nas imagens após filtragem em linhas.
+
 Por fim, implementamos um algoritmo para detecção de bordas, que entrega as imagens abaixo. Vemos que a imagem que estava mais ruidoza em sua derivada, é a que tem melhor detecção de bordas, mostrando que o ruído obtido anteriormente não afeta essa etapa.
 
 <p float="left">

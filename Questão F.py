@@ -123,28 +123,28 @@ def all_pass(d1_array, pole, freq_number):
 
 
 def grayscale_allpass(pole):
-    freq_number = 2*len(img_gs)
+    freq_number = 2 * len(img_gs)
     img_gs_df = img_gs
     img_gs_ap_row = all_pass(img_gs_df, pole, freq_number)
     img_gs_ap_row = np.transpose(img_gs_ap_row)
     img_gs_ap_col = all_pass(img_gs_ap_row, pole, freq_number)
     img_gs_ap_row = np.real(img_gs_ap_row)
     img_gs_ap_col = np.real(img_gs_ap_col)
-    
+
     img_gs_ap_row = np.clip(img_gs_ap_row, 0, 255)
-    img_gs_ap_col = np.clip(img_gs_ap_col, 0 ,255)
-    
+    img_gs_ap_col = np.clip(img_gs_ap_col, 0, 255)
+
     return img_gs_ap_row, img_gs_ap_col
 
 
 def rgb_allpass(pole):
-    freq_number = 2*len(img_color)
+    freq_number = 2 * len(img_color)
     img_color_r_df = pd.DataFrame(img_color[:, :, 0])
     img_color_g_df = pd.DataFrame(img_color[:, :, 1])
     img_color_b_df = pd.DataFrame(img_color[:, :, 2])
     # by: Iago N.
-    # No reason to do it inside a for, the function already does the row by 
-    # row reading/processing what was happening was, that i  added overhead 
+    # No reason to do it inside a for, the function already does the row by
+    # row reading/processing what was happening was, that i  added overhead
     # to an already unoptimized non threaded/non multiprocessed program.
     img_r_ap_row = all_pass(img_color_r_df, pole, freq_number)
     img_r_ap_row = np.transpose(img_r_ap_row)
@@ -165,16 +165,16 @@ def rgb_allpass(pole):
     img_rgb_ap_col[:, :, 1] = np.real(img_g_ap_col)
     img_rgb_ap_row[:, :, 2] = np.real(img_b_ap_row)
     img_rgb_ap_col[:, :, 2] = np.real(img_b_ap_col)
-    
+
     img_rgb_ap_row = np.clip(img_rgb_ap_row, 0, 255)
     img_rgb_ap_col = np.clip(img_rgb_ap_col, 0, 255)
-    
+
     return img_rgb_ap_row, img_rgb_ap_col
 
 
 def derivative(img, h):
-    img_der_hor = np.diff(img, n=h, axis=0)/h
-    img_der_ver = np.diff(img_der_hor, n=h, axis=1)/h
+    img_der_hor = np.diff(img, n=h, axis=0) / h
+    img_der_ver = np.diff(img_der_hor, n=h, axis=1) / h
     return img_der_ver
 
 
@@ -281,7 +281,7 @@ def edge_rgb_detect(image, std_dev, k_size):
     return img_rgb_edge
 
 
-with tqdm(total=5., file=sys.stdout) as pbar:
+with tqdm(total=5.0, file=sys.stdout) as pbar:
     # Questão 1
     image = "Lenna"
     img_gs, img_color = image_load(image + ".tif")

@@ -9,10 +9,10 @@ Dependendo do leitor markdown utilizado, algumas das imagens podem aparecer comp
 A área visão computacional envolve a percepção e a inteligência humana, o que a torna muito interessante para estudos e pesquisas, sabendo que com ela, pode-se copiar o comportamento humano em computadores por meio de câmeras, entregando inteligência a máquinas com aplicações notáveis em diversos campos, como ecologia, medicina, indústria automotiva, mercado financeiro e segurança.
 Hoje, em aplicações mais intensivas como a missão do robô curiosity da NASA (National Aeronautics and Space Administration ), a performance é otimizada por meio de hardware para atender os requisitos do usuário final, evitando a segurança reduzida de modelos construídos por software.
 O processamento de imagem é composto de 4 etapas:
-* Pré processamento: Agregação e busca de informações no conteúdo.
-* Segmentação: Separação em grupos similares.
-* Extração de *features*: Redução de dados redundantes.
-* Reconhecimento: Obtenção de informações a partir de dados multidimensionais.
+* **Pré processamento:** Agregação e busca de informações no conteúdo.
+* **Segmentação:** Separação em grupos similares.
+* **Extração de *features*:** Redução de dados redundantes.
+* **Reconhecimento:** Obtenção de informações a partir de dados multidimensionais.
 Essas etapas são necessárias para um bom funcionamento da visão computacional, focando sempre na melhor performance com menor custo computacional a partir de técnicas que alteram variáveis da imagem, como ruído, brilho e saturação.
 Nesse relatório, há a atuação da etapa 1 em um dataset reduzido, focando em imagens que tem como objeto principal o faces.
 

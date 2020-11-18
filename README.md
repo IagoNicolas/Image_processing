@@ -2,7 +2,7 @@
 
 ## Antes da leitura:
 
-Dependendo do leitor markdown utilizado, algumas das imagens podem aparecer completamente pretas, erro causado pela compressão mal utilizada. Recomenda-se a visualização desse documento no [Visual Studio Code](https://code.visualstudio.com/download) para evitar erros não relacionados a este projeto (upstream).
+Dependendo do leitor markdown utilizado, algumas das imagens podem aparecer completamente pretas, erro causado pela compressão utilizada pelo programa. Recomenda-se a visualização desse documento no [Visual Studio Code](https://code.visualstudio.com/download) para evitar erros não relacionados a este projeto (upstream).
 
 ## Resumo:
 

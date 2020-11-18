@@ -184,7 +184,7 @@ Acesso em: 14/11/2020
 **Scipy-Lectures**\
 Por: Emmanuelle Gouillart, Gaël Varoquaux\
 Image manipulation and processing using Numpy and Scipy\
-Disponível em:https://scipy-lectures.org/advanced/image_processing/#opening-and-writing-to-image-files/\
+Disponível em:https://scipy-lectures.org/advanced/image_processing/#opening-and-writing-to-image-files/ \
 Acesso em: 15/11/2020
 
 **Electrical 4 U**\

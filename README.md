@@ -173,7 +173,7 @@ Por fim, podemos tirar do trabalho desenvolvido que com o filtro correto, conseg
 
 **Scipy**\
 Scipy signal processing\
-Disponível em: https://docs.scipy.org/doc/scipy/reference/signal.html/ \
+Disponível em: https://docs.scipy.org/doc/scipy/reference/signal.html \
 Acesso em: 16/11/2020
 
 **Numpy**:\
@@ -220,7 +220,7 @@ Acesso em: 14/11/2020
 
 **Edge Detection Tutorial**\
 Por: Bill Green
-Disponível em: http://www.doc.gold.ac.uk/~mas02fl/MSC101/ImageProcess/edge.html/ \
+Disponível em: http://www.doc.gold.ac.uk/~mas02fl/MSC101/ImageProcess/edge.html \
 Acesso em: 03/11/2020
 
 **Towards data science**\
@@ -231,5 +231,5 @@ Acesso em: 14/11/2020
 
 **Scikit-image**\
 Canny edge detector\
-Disponível em: https://scikit-image.org/docs/dev/auto_examples/edges/plot_canny.html/ \
+Disponível em: https://scikit-image.org/docs/dev/auto_examples/edges/plot_canny.html \
 Acesso em: 02/11/2020

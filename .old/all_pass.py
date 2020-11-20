@@ -71,10 +71,8 @@ w, h = freqz(b, a, worN = 1024)
 
 k = lfilter(x = img_color[:,:,:], b = w, a = h)
 # by: Iago N.
-# k = lfilter(x = img_gs, b = w, a = h)
+k = lfilter(x = img_gs, b = w, a = h)
 
-out2 = np.fft.fft2(k)
-
-img = Image.fromarray(np.uint8(out2), "RGB")
+img = Image.fromarray(np.uint8(k), "RGB")
 
 img.show()

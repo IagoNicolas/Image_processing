@@ -3,7 +3,7 @@
 #  | |/ _` |/ _` |/ _ \  |  \| |      https://github.com/IagoNicolas
 #  | | (_| | (_| | (_) | | |\  |_
 # |___\__,_|\__, |\___/  |_| \_(_)    Works with python 3.8.6 64-bit
-#           |___/                     @ Thinkpad T480 on 5.9.3-1-MANJARO, 20.1 Mikah.
+#           |___/                     @ Thinkpad T480 on 5.9.3-1-MANJARO, 20.2 Nibia.
 
 from warnings import filterwarnings
 from scipy.signal import bilinear

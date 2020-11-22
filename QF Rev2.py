@@ -81,7 +81,7 @@ def filtro_separavel(kernel, img):
     return (img_row, img_col)
 
 
-def fir_derivativo():  # kernel do derivativo a ser enviado para o filtro_separavel
+def fir_derivativo():
     fir = np.zeros(16)
     for i in range(-8, 9):
         if i == 0:
@@ -397,12 +397,12 @@ with tqdm(total=5.0, file=sys.stdout) as pbar:
     pbar.update(0.5)
     # Questão 3
     img_gs_der_row, img_gs_der_col = filtro_separavel(fir_derivativo(), img_gs_col)
-    image_save(image + "_gs_3_der_row.tif", img_gs_row, "L", 0, 0)
-    image_save(image + "_gs_4_der_col.tif", img_gs_col, "L", 0, 0)
+    image_save(image + "_gs_3_der_row.tif", img_gs_der_row, "L", 0, 0)
+    image_save(image + "_gs_4_der_col.tif", img_gs_der_col, "L", 0, 0)
     pbar.update(0.5)
     img_rgb_der_row, img_rgb_der_col = filtro_separavel(fir_derivativo(), img_rgb_col)
-    image_save(image + "_rgb_3_der_row.tif", img_rgb_row, "RGB", 0, 0)
-    image_save(image + "_rgb_4_der_col.tif", img_rgb_col, "RGB", 0, 0)
+    image_save(image + "_rgb_3_der_row.tif", img_rgb_der_row, "RGB", 0, 0)
+    image_save(image + "_rgb_4_der_col.tif", img_rgb_der_col, "RGB", 0, 0)
     pbar.update(0.5)
     # Questão 4
     ## Proposição 1

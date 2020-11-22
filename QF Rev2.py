@@ -1,4 +1,3 @@
-
 #  ___                    _   _
 # |_ _|__ _  __ _  ___   | \ | |      Iago Nicolas
 #  | |/ _` |/ _` |/ _ \  |  \| |      https://github.com/IagoNicolas
@@ -26,9 +25,10 @@ import cv2
 filterwarnings("ignore")
 
 gauss = cv2.getGaussianKernel(ksize=9, sigma=0)
-sobel =  np.array([[-1,0,1],[-2, 0, 2],[-1,0,1]])
-sharp =  np.array([[-1,-1,-1],[-1, 9,-1],[-1,-1,-1]])
-averg = np.ones((1, 20), dtype="float32")/20
+sobel = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+sharp = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
+averg = np.ones((1, 20), dtype="float32") / 20
+
 
 def image_load(image_file):
     img_color = imread(image_file, 1)
@@ -54,6 +54,7 @@ def image_check(img_color, img_gs):
         time.sleep(0)
     return None
 
+
 def image_save(name, image, mode, angle, side):
     img = Image.fromarray(np.uint8(image), mode)
     if side == 0:
@@ -63,30 +64,35 @@ def image_save(name, image, mode, angle, side):
     img.rotate(angle).save("output/" + name)
     return None
 
-def filtro_separavel(kernel,img):
+
+def filtro_separavel(kernel, img):
     try:
         img_row = cv2.filter2D(img, -1, kernel, borderType=0)
         kernel.transpose()
         img_col = cv2.filter2D(img_row, -1, kernel, borderType=0)
-    except:   
+    except:
         img_row = cv2.filter2D(img, -1, kernel, borderType=0)
         kernel = np.array([kernel])
         kernel.transpose()
-        img_col = cv2.filter2D(img_row, -1, kernel,borderType=0) #aplicando o mesmo filtro, transposto  
-        
-    return(img_row,img_col)
+        img_col = cv2.filter2D(
+            img_row, -1, kernel, borderType=0
+        )  # aplicando o mesmo filtro, transposto
 
-def fir_derivativo(): #kernel do derivativo a ser enviado para o filtro_separavel
-    fir =np.zeros(16)
-    for i in range(-8,9):
-        if i==0:
+    return (img_row, img_col)
+
+
+def fir_derivativo():  # kernel do derivativo a ser enviado para o filtro_separavel
+    fir = np.zeros(16)
+    for i in range(-8, 9):
+        if i == 0:
             fir[8] = 0
         else:
-            if i==8:
-                fir[15]=(1/i)
+            if i == 8:
+                fir[15] = 1 / i
             else:
-                fir[i+8]= (1/i)
+                fir[i + 8] = 1 / i
     return fir
+
 
 def all_pass(d1_array, pole, freq_number):
     w, h = freqz([-1 * pole, 1], [1, -1 * pole], freq_number)
@@ -143,33 +149,36 @@ def rgb_allpass(pole):
 
     return img_rgb_ap_row, img_rgb_ap_col
 
+
 def all_pass2():
     polos = np.linspace(-0.75, 0.75, 7)
     for i, wf in enumerate(polos):
         w, h = freqz([-wf, 1.0], [1.0, -wf])
-        angles = np.unwrap(np.angle(h))     
+        angles = np.unwrap(np.angle(h))
     return w, h
 
-def inversa_tftd_gs(img):  
+
+def inversa_tftd_gs(img):
     w, h = all_pass2()
-    inversa = np.fft.ifft(np.abs(h))    
-    result =np.zeros((512, 1023))
-    
+    inversa = np.fft.ifft(np.abs(h))
+    result = np.zeros((512, 1023))
+
     for i in range(512):
-        result[i]= np.convolve(inversa, img[i])
+        result[i] = np.convolve(inversa, img[i])
 
     linha = np.array(result)
     conv = linha.transpose()
-    col =np.zeros((1023, 1023))
-    
+    col = np.zeros((1023, 1023))
+
     for i in range(1023):
-        col[i]= np.convolve(inversa, conv[i])
+        col[i] = np.convolve(inversa, conv[i])
 
     final = np.array(col).transpose()
     final = np.clip(final, 0, 255)
     return final
 
-def inversa_tftd_rgb(img):  
+
+def inversa_tftd_rgb(img):
     img_color_r_df = pd.DataFrame(img[:, :, 0])
     img_color_g_df = pd.DataFrame(img[:, :, 1])
     img_color_b_df = pd.DataFrame(img[:, :, 2])
@@ -181,33 +190,36 @@ def inversa_tftd_rgb(img):
     img_rgb_tftd[:, :, 0] = img_color_r_tftd
     img_rgb_tftd[:, :, 1] = img_color_g_tftd
     img_rgb_tftd[:, :, 2] = img_color_b_tftd
-    
+
     return img_rgb_tftd
+
 
 def inversa_z_gs(img):
     w, h = all_pass2()
     l = len(h)
     x_axis = np.arange(l)
-    impulse = np.zeros(l); impulse[0] = 1.0
-    z = lfilter(x= impulse, b=[-0.5, 1.0], a=[1.0, -0.5])
-    result =np.zeros((512, 1023))
+    impulse = np.zeros(l)
+    impulse[0] = 1.0
+    z = lfilter(x=impulse, b=[-0.5, 1.0], a=[1.0, -0.5])
+    result = np.zeros((512, 1023))
 
     for i in range(512):
-        result[i]= np.convolve(z, img[i])
+        result[i] = np.convolve(z, img[i])
 
     linha = np.array(result)
     conv = linha.transpose()
-    col =np.zeros((1023, 1023))
+    col = np.zeros((1023, 1023))
     for i in range(1023):
-        col[i]= np.convolve(z, conv[i])
+        col[i] = np.convolve(z, conv[i])
 
     final = np.array(col).transpose()
-    
+
     linha = np.clip(linha, 0, 255)
     conv = np.clip(conv, 0, 255)
     final = np.clip(final, 0, 255)
-    
+
     return final
+
 
 def inversa_z_rgb(img):
     img_color_r_df = pd.DataFrame(img[:, :, 0])
@@ -221,31 +233,33 @@ def inversa_z_rgb(img):
     img_rgb_iz[:, :, 0] = img_color_r_iz
     img_rgb_iz[:, :, 1] = img_color_g_iz
     img_rgb_iz[:, :, 2] = img_color_b_iz
-    
+
     return img_rgb_iz
-    
+
+
 def efeito_fantasma_gs(img):
     w, h = all_pass2()
-    inversa = np.abs(np.fft.ifft(h))     
-    result =np.zeros((512, 1023))
+    inversa = np.abs(np.fft.ifft(h))
+    result = np.zeros((512, 1023))
 
     for i in range(512):
-        result[i]= np.convolve(inversa, img[i])
+        result[i] = np.convolve(inversa, img[i])
 
     linha = np.array(result)
     conv = linha.transpose()
-    col =np.zeros((1023, 1023))
-    
+    col = np.zeros((1023, 1023))
+
     for i in range(1023):
-        col[i]= np.convolve(inversa, conv[i])
+        col[i] = np.convolve(inversa, conv[i])
 
     final = np.array(col).transpose()
-    
+
     linha = np.clip(linha, 0, 255)
     conv = np.clip(conv, 0, 255)
     final = np.clip(final, 0, 255)
-    
+
     return final
+
 
 def efeito_fantasma_rgb(img):
     img_color_r_df = pd.DataFrame(img[:, :, 0])
@@ -260,8 +274,9 @@ def efeito_fantasma_rgb(img):
     img_rgb_ef[:, :, 0] = img_color_r_ef
     img_rgb_ef[:, :, 1] = img_color_g_ef
     img_rgb_ef[:, :, 2] = img_color_b_ef
-    
+
     return img_rgb_ef
+
 
 def no_blur(image, arctg):
     val = np.zeros((len(image), len(image)), dtype=np.int32)
@@ -364,71 +379,61 @@ def edge_rgb_detect(image, std_dev, k_size):
     img_rgb_edge[:, :, 2] = img_color_b_ed
 
     return img_rgb_edge
+
+
 with tqdm(total=5.0, file=sys.stdout) as pbar:
     # Questão 1
     image = "Lenna"
     img_gs, img_color = image_load(image + ".tif")
-    pbar.update(1.)
+    pbar.update(1.0)
     # Questão 2
     img_gs_row, img_gs_col = filtro_separavel(gauss, img_gs)
     image_save(image + "_gs_1_row.tif", img_gs_row, "L", 0, 0)
     image_save(image + "_gs_2_col.tif", img_gs_col, "L", 0, 0)
-    pbar.update(.5)
+    pbar.update(0.5)
     img_rgb_row, img_rgb_col = filtro_separavel(gauss, img_color)
     image_save(image + "_rgb_1_row.tif", img_rgb_row, "RGB", 0, 0)
     image_save(image + "_rgb_2_col.tif", img_rgb_col, "RGB", 0, 0)
-    pbar.update(.5)
+    pbar.update(0.5)
     # Questão 3
     img_gs_der_row, img_gs_der_col = filtro_separavel(fir_derivativo(), img_gs_col)
     image_save(image + "_gs_3_der_row.tif", img_gs_row, "L", 0, 0)
     image_save(image + "_gs_4_der_col.tif", img_gs_col, "L", 0, 0)
-    pbar.update(.5)
+    pbar.update(0.5)
     img_rgb_der_row, img_rgb_der_col = filtro_separavel(fir_derivativo(), img_rgb_col)
     image_save(image + "_rgb_3_der_row.tif", img_rgb_row, "RGB", 0, 0)
     image_save(image + "_rgb_4_der_col.tif", img_rgb_col, "RGB", 0, 0)
-    pbar.update(.5)
+    pbar.update(0.5)
     # Questão 4
     ## Proposição 1
     img_gs_ap_row, img_gs_ap_col = grayscale_allpass(1 / 2)
     image_save(image + "_gs_5_ap_row.tif", img_gs_ap_row, "L", 270, 1)
     image_save(image + "_gs_6_ap_col.tif", img_gs_ap_col, "L", 270, 1)
-    pbar.update(.2)
+    pbar.update(0.2)
     img_rgb_ap_row, img_rgb_ap_col = rgb_allpass(1 / 2)
     image_save(image + "_rgb_5_ap_row.tif", img_rgb_ap_row, "RGB", 270, 1)
     image_save(image + "_rgb_6_ap_col.tif", img_rgb_ap_col, "RGB", 270, 1)
-    pbar.update(.5)
+    pbar.update(0.5)
     ## Proposição 2
     img_gs_tftd_rc = inversa_tftd_gs(img_gs)
     image_save(image + "_gs_7_tftd_rc.tif", img_gs_tftd_rc, "L", 0, 0)
     img_rgb_tftd_rc = inversa_tftd_rgb(img_color)
     image_save(image + "_rgb_7_tftd_rc.tif", img_rgb_tftd_rc, "RGB", 270, 1)
-    pbar.update(.1)
+    pbar.update(0.1)
     img_gs_iz_rc = inversa_z_gs(img_gs)
     image_save(image + "_gs_8_iz_rc.tif", img_gs_iz_rc, "L", 0, 0)
     img_rgb_iz_rc = inversa_z_rgb(img_color)
     image_save(image + "_rgb_8_iz_rc.tif", img_rgb_iz_rc, "RGB", 270, 1)
-    pbar.update(.1)
+    pbar.update(0.1)
     img_gs_ef_rc = efeito_fantasma_gs(img_gs)
     image_save(image + "_gs_9_ef_rc.tif", img_gs_ef_rc, "L", 0, 0)
     img_rgb_ef_rc = efeito_fantasma_rgb(img_color)
     image_save(image + "_rgb_9_ef_rc.tif", img_rgb_ef_rc, "RGB", 270, 1)
-    pbar.update(.1)
+    pbar.update(0.1)
     # Questão 5
     edge_gs = edge_gs_detect(img_gs, 1, 3)
     image_save(image + "_gs_10_ed.tif", edge_gs, "L", 0, 0)
-    pbar.update(.5)
+    pbar.update(0.5)
     edge_rgb = edge_rgb_detect(img_color, 1, 3)
     image_save(image + "_rgb_10_ed.tif", edge_rgb, "RGB", 0, 0)
-    pbar.update(.5)
-
-
-
-
-
-
-
-
-
-
-
-
+    pbar.update(0.5)

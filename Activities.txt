@@ -1,0 +1,12 @@
+image_load
+image_check
+filtro_separável
+fir_derivativo
+
+
+Organizar Q2 (Thamires)
+Organizar testes Q4 (Thamires)
+
+
+Montar código integrado (Iago)
+Preparar apresentação (Iago)

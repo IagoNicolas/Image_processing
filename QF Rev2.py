@@ -252,11 +252,7 @@ def efeito_fantasma_gs(img):
     for i in range(1023):
         col[i] = np.convolve(inversa, conv[i])
 
-    final = np.array(col).transpose()
-
-    linha = np.clip(linha, 0, 255)
-    conv = np.clip(conv, 0, 255)
-    final = np.clip(final, 0, 255)
+    final = np.clip(np.array(col).transpose() * .1, 0, 255)
 
     return final
 
